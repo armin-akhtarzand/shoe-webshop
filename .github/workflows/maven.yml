@@ -21,17 +21,27 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        path: shoe-webshop
+
+    - name: Checkout mail-service
+      uses: actions/checkout@v4
+      with:
+        repository: armin-akhtarzand/mail-service
+        path: mail-service
+
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+
     - name: Build mail-service
       run: mvn clean install -f mail-service/pom.xml
 
     - name: Build shoe-webshop
-      run: mvn clean package
+      run: mvn clean package -f shoe-webshop/pom.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
   

@@ -35,4 +35,4 @@ jobs:
       - name: Build shoe-webshop
         run: mvn -B clean package -f shoe-webshop/pom.xml
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}

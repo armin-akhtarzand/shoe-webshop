@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Din profil - Shoe Webshop</title>
+</head>
+<body>
+    <h2>Din profil</h2>
+    <p>Inloggad som: <strong th:text="${username}">Användarnamn</strong></p>
+    
+    <div sec:authorize="hasRole('ADMIN')">
+        <p style="color: blue;">Du har rollen: <strong>ADMIN</strong></p>
+    </div>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Logga ut</button>
+    </form>
+</body>
+</html>

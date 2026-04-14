@@ -10,13 +10,13 @@ import lombok.Setter;
 @Setter
 public class UserRegistrationDto {
 
-    @NotBlank(message = "E-post får inte vara tom")
-    @Email(message = "Ange en giltig e-postadress")
+    @NotBlank(message = "Email must not be empty")
+    @Email(message = "Please provide a valid email address")
     private String email;
 
-    @NotBlank(message = "Lösenord får inte vara tomt")
+    @NotBlank(message = "Password must not be empty")
     private String password;
 
-    @AssertTrue(message = "Du måste godkänna behandlingen av personuppgifter")
+    @AssertTrue(message = "You must consent to the processing of personal data")
     private boolean consent;
 }

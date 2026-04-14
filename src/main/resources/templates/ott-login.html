@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Two-Factor Authentication - Shoe Webshop</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f4f4f4; }
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 400px; text-align: center; }
+        h2 { color: #333; }
+        p { color: #666; margin-bottom: 25px; line-height: 1.5; }
+        button { width: 100%; padding: 12px; background-color: #007bff; border: none; border-radius: 5px; color: white; cursor: pointer; font-size: 16px; font-weight: bold; }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Complete Login</h2>
+        <p>We have enabled two-factor authentication for your security. Click the button below and we will send a login link to your email.</p>
+        
+        <form th:action="@{/ott/generate}" method="post">
+            <input type="hidden" name="username" th:value="${#authentication.name}"/>
+            <button type="submit">Send Login Link</button>
+        </form>
+    </div>
+</body>
+</html>

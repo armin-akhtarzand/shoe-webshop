@@ -1,10 +1,12 @@
 package se.iths.armin.shoewebshop.cart;
 
 
+import lombok.Getter;
 import se.iths.armin.shoewebshop.entity.Product;
 
 import java.math.BigDecimal;
 
+@Getter
 public class CartItem {
 
     private Product product;
@@ -15,5 +17,18 @@ public class CartItem {
         this.product = product;
         this.quantity = quantity;
         this.price = product.getPrice();
+    }
+
+
+    public BigDecimal getTotalPrice() {
+        return price.multiply(BigDecimal.valueOf(quantity));
+    }
+
+    public void increaseQuantity(int amount) {
+        this.quantity += amount;
+    }
+
+    public void decreaseQuantity(int amount) {
+        this.quantity -= amount;
     }
 }

@@ -1,8 +1,7 @@
-package se.iths.armin.shoewebshop.cart;
+package se.iths.armin.shoewebshop.entity;
 
 
 import lombok.Getter;
-import se.iths.armin.shoewebshop.entity.Product;
 
 import java.math.BigDecimal;
 

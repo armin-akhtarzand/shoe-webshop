@@ -1,7 +1,8 @@
-package se.iths.armin.shoewebshop.cart;
+package se.iths.armin.shoewebshop.service;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
+import se.iths.armin.shoewebshop.entity.Cart;
 import se.iths.armin.shoewebshop.entity.Product;
 
 

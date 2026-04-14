@@ -1,6 +1,4 @@
-package se.iths.armin.shoewebshop.cart;
-
-import se.iths.armin.shoewebshop.entity.Product;
+package se.iths.armin.shoewebshop.entity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

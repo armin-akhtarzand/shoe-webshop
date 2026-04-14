@@ -26,10 +26,33 @@ public class AuthController {
         return "login";
     }
 
+    @GetMapping("/ott/generate-ui")
+    public String ott() {
+        return "ott-login";
+    }
+
+    @GetMapping("/ott/sent")
+    public String ottSent() {
+        return "ott-sent";
+    }
+
     @GetMapping("/profile")
     public String profile(@AuthenticationPrincipal UserDetails userDetails, Model model) {
         model.addAttribute("username", userDetails.getUsername());
         return "profile";
+    }
+
+    @PostMapping("/profile/delete")
+    public String deleteAccount(@AuthenticationPrincipal UserDetails userDetails, jakarta.servlet.http.HttpServletRequest request) throws jakarta.servlet.ServletException {
+        userService.deleteUser(userDetails.getUsername());
+        request.logout();
+        return "redirect:/login?deleted";
+    }
+
+    @PostMapping("/profile/export")
+    public String exportData(@AuthenticationPrincipal UserDetails userDetails) {
+        userService.sendUserData(userDetails.getUsername());
+        return "redirect:/profile?exported";
     }
 
     @GetMapping("/register")

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Inloggning - Shoe Webshop</title>
+    <title>Login - Shoe Webshop</title>
     <style>
         body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f4f4f4; }
         .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 350px; }
@@ -18,28 +18,28 @@
 </head>
 <body>
     <div class="container">
-        <h2>Logga in</h2>
+        <h2>Login</h2>
         <div th:if="${param.error}" class="error">
-            Fel e-post eller lösenord.
+            Invalid email or password.
         </div>
         <div th:if="${param.logout}" class="success">
-            Du har loggat ut.
+            You have been logged out.
         </div>
         <div th:if="${param.registered}" class="success">
-            Registrering klar! Logga in nu.
+            Registration complete! Please login.
         </div>
         <form th:action="@{/login}" method="post">
             <div>
-                <label for="username">E-post:</label>
+                <label for="username">Email:</label>
                 <input type="email" id="username" name="username" required autofocus>
             </div>
             <div>
-                <label for="password">Lösenord:</label>
+                <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
             </div>
-            <button type="submit">Logga in</button>
+            <button type="submit">Login</button>
         </form>
-        <p style="text-align: center; margin-top: 15px;">Inget konto? <a th:href="@{/register}">Skapa ett här</a>.</p>
+        <p style="text-align: center; margin-top: 15px;">No account? <a th:href="@{/register}">Create one here</a>.</p>
     </div>
 </body>
 </html>

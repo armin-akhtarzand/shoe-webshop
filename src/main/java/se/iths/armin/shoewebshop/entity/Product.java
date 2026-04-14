@@ -1,31 +1,25 @@
 package se.iths.armin.shoewebshop.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.math.BigDecimal;
 
 @Entity
 @Getter
 @Setter
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long productId;
 
-    @NotBlank
-    private String name;
+    @Column(nullable = false)
+    private BigDecimal price;
 
-    @Positive
-    private double price;
+    @Column(nullable = false)
+    private String productName;
 
-    @NotBlank
-    private String category;
 
-    @NotBlank
-    private String imageUrl;
 }

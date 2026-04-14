@@ -32,7 +32,7 @@
     <repositories>
         <repository>
             <id>github</id>
-            <url>https://maven.pkg.github.com/armin-akhtarzand/*</url>
+            <url>https://maven.pkg.github.com/armin-akhtarzand/mail-service</url>
         </repository>
     </repositories>
     <dependencies>

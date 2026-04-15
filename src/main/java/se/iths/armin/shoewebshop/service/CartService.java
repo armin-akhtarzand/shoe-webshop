@@ -9,6 +9,12 @@ import se.iths.armin.shoewebshop.entity.Product;
 @Service
 public class CartService {
 
+    private final ProductService productService;
+
+    public CartService(ProductService productService) {
+        this.productService = productService;
+    }
+
 
     private Cart getOrCreateCart(HttpSession session) {
         Cart cart = (Cart) session.getAttribute("cart");
@@ -20,13 +26,15 @@ public class CartService {
     }
 
 
-    public void addProduct(HttpSession session, Product product) {
+    public void addProduct(HttpSession session, Long id) {
         Cart cart = getOrCreateCart(session);
+        Product product = productService.findById(id);
         cart.addProduct(product);
     }
 
-    public void removeProduct(HttpSession session, Product product) {
+    public void removeProduct(HttpSession session, Long id) {
         Cart cart = getOrCreateCart(session);
+        Product product = productService.findById(id);
         cart.removeProduct(product);
     }
 
@@ -40,10 +48,8 @@ public class CartService {
         cart.clearCart();
     }
 
-    public boolean cartIsEmpty(HttpSession session) {
+    public boolean isCartEmpty(HttpSession session) {
         Cart cart = getOrCreateCart(session);
         return cart.isEmpty();
     }
-
-
 }

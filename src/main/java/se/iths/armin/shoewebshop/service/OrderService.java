@@ -1,7 +1,5 @@
 package se.iths.armin.shoewebshop.service;
 
-import jakarta.persistence.criteria.Order;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import se.iths.armin.shoewebshop.entity.Cart;
 import se.iths.armin.shoewebshop.entity.CartItem;

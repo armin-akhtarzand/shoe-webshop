@@ -12,6 +12,7 @@ import se.iths.armin.shoewebshop.repository.ProductRepository;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @SpringBootTest
 public class CartServiceIntegrationTest {
@@ -26,53 +27,82 @@ public class CartServiceIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        // Vi skapar en ny tom session före varje test
         session = new MockHttpSession();
-        // Vi tömmer databasen så vi startar rent i varje test
         productRepository.deleteAll();
+    }
+
+    private Product createProduct(String name, double price) {
+        Product product = new Product();
+        product.setProductName(name);
+        product.setPrice(BigDecimal.valueOf(price));
+        product.setCategory("Sneakers");
+        product.setProductImageURL("http://example.com/image.png");
+        return productRepository.save(product);
     }
 
     @Test
     void shouldCreateNewCartIfNoneExistsInSession() {
-        // Kontrollera att sessionen är tom från början
         assertThat(session.getAttribute("cart")).isNull();
 
-        // Anropa tjänsten för att hämta varukorgen
         Cart cart = cartService.getCart(session);
 
-        // Kontrollera att en ny varukorg skapades och sparades i sessionen
         assertThat(cart).isNotNull();
         assertThat(session.getAttribute("cart")).isEqualTo(cart);
     }
 
     @Test
-    void shouldAddProductToCartAndVerifyContent() {
-        // 1. Skapa och spara en produkt i databasen (H2)
-        Product product = new Product();
-        product.setProductName("Test Sko");
-        product.setPrice(BigDecimal.valueOf(500.0));
-        product.setCategory("Sneakers");
-        product.setProductImageURL("http://example.com/image.png");
-        product = productRepository.save(product);
+    void shouldReturnExistingCartFromSession() {
+        Cart existingCart = new Cart();
+        session.setAttribute("cart", existingCart);
 
-        // 2. Lägg till produkten i varukorgen via tjänsten
+        Cart returnedCart = cartService.getCart(session);
+
+        assertThat(returnedCart).isSameAs(existingCart);
+    }
+
+
+    @Test
+    void shouldAddProductToCartAndIncreaseQuantity() {
+        Product product = createProduct("Test Sko", 500.0);
+
+        cartService.addProduct(session, product.getProductId());
         cartService.addProduct(session, product.getProductId());
 
-        // 3. Hämta varukorgen och kontrollera att den innehåller produkten
         Cart cart = cartService.getCart(session);
+
         assertThat(cart.getCartItems()).hasSize(1);
-        assertThat(cart.getCartItems().get(0).getProduct().getProductName()).isEqualTo("Test Sko");
+        assertThat(cart.getCartItems().get(0).getQuantity()).isEqualTo(2);
+    }
+
+    @Test
+    void shouldCalculateTotalPriceCorrectly() {
+        Product product = createProduct("Test Sko", 500.0);
+
+        cartService.addProduct(session, product.getProductId());
+        cartService.addProduct(session, product.getProductId());
+
+        Cart cart = cartService.getCart(session);
+
+        assertThat(cart.getTotalPrice()).isEqualByComparingTo(BigDecimal.valueOf(1000.0));
+    }
+
+    @Test
+    void shouldThrowExceptionIfProductDoesNotExist() {
+        assertThatThrownBy(() ->
+                cartService.addProduct(session, 999L)
+        ).isInstanceOf(RuntimeException.class);
     }
 
     @Test
     void shouldClearCartInSession() {
-        // Hämta en varukorg (skapas automatiskt)
-        cartService.getCart(session);
+        Product product = createProduct("Test Sko", 500.0);
 
-        // Töm varukorgen via tjänsten
+        cartService.addProduct(session, product.getProductId());
+
+        assertThat(cartService.isCartEmpty(session)).isFalse();
+
         cartService.clearCart(session);
 
-        // Verifiera att varukorgen är tom
         assertThat(cartService.isCartEmpty(session)).isTrue();
     }
 }

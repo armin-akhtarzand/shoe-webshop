@@ -4,6 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mock.web.MockHttpSession;
 import se.iths.armin.shoewebshop.entity.Cart;
 import se.iths.armin.shoewebshop.entity.Product;
@@ -104,5 +108,13 @@ public class CartServiceIntegrationTest {
         cartService.clearCart(session);
 
         assertThat(cartService.isCartEmpty(session)).isTrue();
+    }
+
+    @TestConfiguration
+    static class TestMailConfig {
+        @Bean
+        JavaMailSender mailSender() {
+            return new JavaMailSenderImpl();
+        }
     }
 }

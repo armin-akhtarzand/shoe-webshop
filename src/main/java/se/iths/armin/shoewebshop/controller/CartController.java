@@ -39,7 +39,7 @@ public class CartController {
     @PostMapping("/add/{id}")
     public String addProductToCart(@PathVariable Long id, HttpSession session) {
         cartService.addProduct(session, id);
-        return "redirect:/products";
+        return "redirect:/cart";
     }
 
     @PostMapping("/remove/{id}")

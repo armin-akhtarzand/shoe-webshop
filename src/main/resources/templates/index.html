@@ -3,64 +3,41 @@
 <head>
     <title>Shoe Webshop - Home</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f8f9fa; }
-        .header { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .nav { margin-bottom: 20px; }
-        .nav a { margin-right: 15px; text-decoration: none; color: #007bff; padding: 8px 16px; border-radius: 4px; }
-        .nav a:hover { background: #e9ecef; }
-        .content { background: white; padding: 30px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .content { text-align: center; margin: 40px 0; }
         .cookie-banner {
             position: fixed; bottom: 0; left: 0; right: 0;
-            background: #343a40; color: white; padding: 15px;
-            display: none; z-index: 1000;
+            background: gray; color: white; padding: 10px; text-align: center;
         }
-        .cookie-banner.show { display: block; }
-        .cookie-banner button { margin: 0 10px; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; }
-        .cookie-banner .accept { background: #28a745; color: white; }
-        .cookie-banner .decline { background: #dc3545; color: white; }
     </style>
 </head>
 <body>
-<div class="header">
-    <h1>Welcome to Shoe Webshop</h1>
-    <div class="nav">
-        <a href="/">Home</a>
-        <a href="/products">Browse Products</a>
-        <a href="/cart" sec:authorize="isAuthenticated()">Shopping Cart</a>
-        <a href="/profile" sec:authorize="isAuthenticated()">Profile</a>
-        <a href="/login" sec:authorize="!isAuthenticated()">Login</a>
-        <a href="/register" sec:authorize="!isAuthenticated()">Register</a>
-        <a href="/logout" sec:authorize="isAuthenticated()">Logout</a>
-    </div>
-</div>
+<!-- Header and Footer will be included as fragments -->
 
 <div class="content">
     <h2>Find Your Perfect Shoes</h2>
-    <p>Discover our amazing collection of shoes from top brands.</p>
-    <p>Browse by category or view all products.</p>
-    <a href="/products" style="display: inline-block; background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; margin-top: 20px;">Start Shopping</a>
+    <p>Discover our collection of shoes.</p>
+    <a href="/products">Start Shopping</a>
 </div>
 
-<div id="cookieBanner" class="cookie-banner">
-    <span>This website uses cookies to enhance your experience. By continuing to use this site, you agree to our use of cookies.</span>
-    <button class="accept" onclick="acceptCookies()">Accept</button>
-    <button class="decline" onclick="declineCookies()">Decline</button>
+<div id="cookieBanner" class="cookie-banner" style="display: none;">
+    This website uses cookies.
+    <button onclick="acceptCookies()">Accept</button>
+    <button onclick="declineCookies()">Decline</button>
 </div>
 
 <script>
     function acceptCookies() {
-        document.cookie = "cookieConsent=accepted; path=/; max-age=31536000"; // 1 year
-        document.getElementById('cookieBanner').classList.remove('show');
+        document.cookie = "cookieConsent=accepted; path=/; max-age=31536000";
+        document.getElementById('cookieBanner').style.display = 'none';
     }
-
     function declineCookies() {
         document.cookie = "cookieConsent=declined; path=/; max-age=31536000";
-        document.getElementById('cookieBanner').classList.remove('show');
+        document.getElementById('cookieBanner').style.display = 'none';
     }
-
     window.onload = function() {
         if (!document.cookie.includes('cookieConsent=')) {
-            document.getElementById('cookieBanner').classList.add('show');
+            document.getElementById('cookieBanner').style.display = 'block';
         }
     }
 </script>

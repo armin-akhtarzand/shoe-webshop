@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Product - Admin</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 8px; border: 1px solid #ccc; }
+        .error { color: red; font-size: 0.9em; margin-top: 5px; }
+        .btn { background: green; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+        .btn:hover { background: darkgreen; }
+        .global-error { background: #ffe6e6; color: red; padding: 10px; margin-bottom: 15px; border: 1px solid #ffcccc; }
+    </style>
+</head>
+<body>
+<h1>Create New Product</h1>
+
+<div th:if="${error}" class="global-error">
+    <strong>Error:</strong> <span th:text="${error}">Error message</span>
+</div>
+
+<form th:action="@{/admin/products}" th:object="${product}" method="post">
+    <div class="form-group">
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName" th:field="*{productName}" required>
+        <div th:if="${#fields.hasErrors('productName')}" class="error" th:errors="*{productName}"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="category">Category:</label>
+        <select id="category" th:field="*{category}">
+            <option value="">Select category</option>
+            <option value="Sneakers">Sneakers</option>
+            <option value="Boots">Boots</option>
+            <option value="Sandals">Sandals</option>
+            <option value="Formal">Formal</option>
+        </select>
+        <div th:if="${#fields.hasErrors('category')}" class="error" th:errors="*{category}"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="price">Price (Kr):</label>
+        <input type="number" id="price" th:field="*{price}" step="0.01" min="0" required>
+        <div th:if="${#fields.hasErrors('price')}" class="error" th:errors="*{price}"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="productImageURL">Image URL:</label>
+        <input type="url" id="productImageURL" th:field="*{productImageURL}" required>
+        <div th:if="${#fields.hasErrors('productImageURL')}" class="error" th:errors="*{productImageURL}"></div>
+    </div>
+
+    <button type="submit" class="btn">Create Product</button>
+    <a href="/products" style="margin-left: 10px; color: #666;">Cancel</a>
+</form>
+</body>
+</html>

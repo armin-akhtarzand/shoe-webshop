@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Products - Shoe Webshop</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+
+        .categories { margin-bottom: 20px; }
+        .categories a { margin-right: 10px; padding: 5px; text-decoration: none; border: 1px solid #ccc; }
+        .categories a.active { background: #ddd; }
+
+        .products { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+        .product { border: 1px solid #ccc; padding: 10px; }
+        .product h3 { margin: 0 0 5px 0; }
+        .product .category { color: #666; font-size: 0.9em; }
+        .product .price { font-weight: bold; color: green; }
+        .product button { background: green; color: white; border: none; padding: 5px; width: 100%; cursor: pointer; }
+
+        .empty { text-align: center; padding: 20px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+<div class="categories">
+    <strong>Categories:</strong>
+    <a href="/products" th:class="${param.category == null} ? 'active' : ''">All</a>
+    <a href="/products/category/Sneakers" th:class="${param.category == 'Sneakers'} ? 'active' : ''">Sneakers</a>
+    <a href="/products/category/Boots" th:class="${param.category == 'Boots'} ? 'active' : ''">Boots</a>
+    <a href="/products/category/Sandals" th:class="${param.category == 'Sandals'} ? 'active' : ''">Sandals</a>
+    <a href="/products/category/Formal" th:class="${param.category == 'Formal'} ? 'active' : ''">Formal</a>
+</div>
+
+<div class="products" th:if="${not #lists.isEmpty(products)}">
+    <div th:each="product : ${products}" class="product">
+        <h3 th:text="${product.productName}">Product Name</h3>
+        <div class="category" th:text="'Category: ' + ${product.category}">Category</div>
+        <div class="price" th:text="'Kr ' + ${#numbers.formatDecimal(product.price, 1, 2)}">Kr 0.00</div>
+        <form th:action="@{/cart/add/{id}(id=${product.productId})}" method="post" sec:authorize="isAuthenticated()">
+            <button type="submit">Add to Cart</button>
+        </form>
+        <div sec:authorize="!isAuthenticated()" style="color: red; font-size: 0.8em; margin-top: 10px;">
+            Please <a href="/login">login</a> to add to cart
+        </div>
+    </div>
+</div>
+
+<div th:if="${#lists.isEmpty(products)}" class="empty">
+    <h3>No products found</h3>
+    <p th:if="${param.category != null}">No products in category: <strong th:text="${param.category}">Category</strong></p>
+    <p th:if="${param.category == null}">No products available.</p>
+    <a href="/products">View all products</a>
+</div>
+</body>
+</html>

@@ -18,20 +18,20 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
-    @NotNull
-    @Positive
+    @NotNull(message = "Price is required")
+    @Positive(message = "Price must be greater than 0")
     @Column(nullable = false)
     private BigDecimal price;
 
-    @NotBlank
+    @NotBlank(message = "Product name is required")
     @Column(nullable = false)
     private String productName;
 
-    @NotBlank
+    @NotBlank(message = "Category is required")
     @Column(nullable = false)
     private String category;
 
-    @NotBlank
+    @NotBlank(message = "Product image URL is required")
     @Column(nullable = false)
     private String productImageURL;
 

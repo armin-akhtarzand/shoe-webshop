@@ -1,8 +1,10 @@
 package se.iths.armin.shoewebshop.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,8 +29,19 @@ public class AdminProductController {
     }
 
     @PostMapping
-    public String createProduct(@ModelAttribute Product product){
-        productService.createProduct(product);
-        return "redirect:/products";
+    public String createProduct(@Valid @ModelAttribute Product product,
+                                BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            model.addAttribute("product", product);
+            return "create-product";
+        }
+        try{
+            productService.createProduct(product);
+            return "redirect:/products";
+        } catch (Exception e){
+            model.addAttribute("product", product);
+            model.addAttribute("error","Failed to create product: "+e.getMessage());
+            return "redirect:/products";
+        }
     }
 }

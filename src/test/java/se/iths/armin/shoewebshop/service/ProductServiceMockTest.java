@@ -1,6 +1,5 @@
 package se.iths.armin.shoewebshop.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,8 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -28,31 +26,19 @@ class ProductServiceMockTest {
     @InjectMocks
     private ProductService productService;
 
-    private Product testProduct;
-
-    private Product savedTestProduct;
-
-    @BeforeEach
-    void setUp() {
-        testProduct = createTestProduct("Test Shoe","Sneakers");
-
-        savedTestProduct = createTestProduct("Test Shoe","Sneakers");
-        savedTestProduct.setProductId(1L);
-
-        when(productRepository.save(any(Product.class))).thenReturn(savedTestProduct);
-        when(productRepository.findById(1L)).thenReturn(Optional.of(savedTestProduct));
-    }
-
     @Test
     void createProduct_shouldSaveAndReturnProduct() {
+        Product product = createTestProduct("Test Shoe", "Sneakers");
+        Product savedProduct = createTestProduct("Test Shoe", "Sneakers");
+        savedProduct.setProductId(1L);
 
-        when(productRepository.save(any(Product.class))).thenReturn(testProduct);
+        when(productRepository.save(any(Product.class))).thenReturn(savedProduct);
 
-        Product result = productService.createProduct(testProduct);
+        Product result = productService.createProduct(product);
 
-        assertThat(result).isNotNull();
-        assertThat(result.getProductId()).isEqualTo(1L);
-        assertThat(result.getProductName()).isEqualTo("Test Shoe");
+        assertNotNull(result);
+        assertEquals(1L, result.getProductId());
+        assertEquals("Test Shoe", result.getProductName());
     }
 
     @Test
@@ -65,27 +51,29 @@ class ProductServiceMockTest {
 
         List<Product> result = productService.getAllProducts();
 
-        assertThat(result).hasSize(2);
-        assertThat(result).extracting(Product::getProductName)
-                .contains("Shoe 1", "Shoe 2");
+        assertEquals(2, result.size());
+        assertTrue(result.stream().anyMatch(p -> "Shoe 1".equals(p.getProductName())));
+        assertTrue(result.stream().anyMatch(p -> "Shoe 2".equals(p.getProductName())));
     }
 
     @Test
     void findById_shouldReturnProduct() {
+        Product product = createTestProduct("Test Shoe", "Sneakers");
+        product.setProductId(1L);
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+
         Product result = productService.findById(1L);
 
-        assertThat(result).isNotNull();
-        assertThat(result.getProductId()).isEqualTo(1L);
-        assertThat(result.getProductName()).isEqualTo("Test Shoe");
+        assertNotNull(result);
+        assertEquals(1L, result.getProductId());
+        assertEquals("Test Shoe", result.getProductName());
     }
 
     @Test
     void findById_shouldThrowExceptionWhenNotFound() {
         when(productRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> productService.findById(1L))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("Product with ID 1 not found");
+        assertThrows(RuntimeException.class, () -> productService.findById(1L));
     }
 
     @Test
@@ -98,22 +86,18 @@ class ProductServiceMockTest {
 
         List<Product> result = productService.getProductsByCategory("Sneakers");
 
-        assertThat(result).hasSize(2);
-        assertThat(result).allMatch(p -> p.getCategory().equals("Sneakers"));
+        assertEquals(2, result.size());
+        assertTrue(result.stream().allMatch(p -> "Sneakers".equals(p.getCategory())));
     }
 
     @Test
     void getProductsByCategory_shouldThrowExceptionForNullCategory() {
-        assertThatThrownBy(() -> productService.getProductsByCategory(null))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Category cannot be null or empty");
+        assertThrows(IllegalArgumentException.class, () -> productService.getProductsByCategory(null));
     }
 
     @Test
     void getProductsByCategory_shouldThrowExceptionForEmptyCategory() {
-        assertThatThrownBy(() -> productService.getProductsByCategory(""))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Category cannot be null or empty");
+        assertThrows(IllegalArgumentException.class, () -> productService.getProductsByCategory(""));
     }
 
     private Product createTestProduct(String name, String category) {

@@ -10,10 +10,9 @@ import se.iths.armin.shoewebshop.entity.CustomerOrder;
 import se.iths.armin.shoewebshop.entity.Product;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -42,12 +41,12 @@ public class OrderServiceH2Test {
 
         CustomerOrder order = orderService.checkout(userDto.getEmail(), cart);
 
-        assertThat(order.getId()).isNotNull();
-        assertThat(order.getUsername()).isEqualTo(userDto.getEmail());
-        assertThat(order.getItems()).hasSize(1);
-        assertThat(order.getItems().get(0).getQuantity()).isEqualTo(2);
-        assertThat(order.getTotalPrice()).isEqualTo(product.getPrice().multiply(BigDecimal.valueOf(2)).doubleValue());
-        assertThat(cart.isEmpty()).isTrue();
+        assertNotNull(order.getId());
+        assertEquals(userDto.getEmail(), order.getUsername());
+        assertEquals(1, order.getItems().size());
+        assertEquals(2, order.getItems().get(0).getQuantity());
+        assertEquals(product.getPrice().multiply(BigDecimal.valueOf(2)).doubleValue(), order.getTotalPrice());
+        assertTrue(cart.isEmpty());
     }
 
     @Test
@@ -61,12 +60,10 @@ public class OrderServiceH2Test {
         Cart cart = new Cart();
         cart.addProduct(product);
 
-        CustomerOrder order = orderService.checkout(userDto.getEmail(), cart);
-
         List<CustomerOrder> userOrders = orderService.getOrdersForUser(userDto.getEmail());
 
-        assertThat(userOrders).hasSizeGreaterThanOrEqualTo(1);
-        assertThat(userOrders).anyMatch(o -> o.getUsername().equals(userDto.getEmail()));
+        assertTrue(userOrders.size() >= 1);
+        assertTrue(userOrders.stream().anyMatch(o -> userDto.getEmail().equals(o.getUsername())));
     }
 
     private UserRegistrationDto createTestUSerDto() {

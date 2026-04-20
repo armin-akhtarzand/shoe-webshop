@@ -17,19 +17,20 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, EmailOttSuccessHandler ottSuccessHandler) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/", "/register", "/login", "/login/ott", "/ott/generate-ui", "/ott/sent", "/h2-console/**", "/css/**", "/js/**").permitAll()
-                    .requestMatchers("/admin/**").hasRole("ADMIN")
-                    .anyRequest().authenticated()
+                        .requestMatchers("/", "/register", "/login", "/login/ott", "/ott/generate-ui", "/ott/sent", "/h2-console/**", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/cart/**").authenticated()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                    .loginPage("/login")
-                    .defaultSuccessUrl("/ott/generate-ui", true)
-                    .permitAll()
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/ott/generate-ui", true)
+                        .permitAll()
                 )
                 .oneTimeTokenLogin(ott -> ott
-                    .tokenGenerationSuccessHandler(ottSuccessHandler)
-                    .loginPage("/login/ott")
-                )                .logout(logout -> logout
+                        .tokenGenerationSuccessHandler(ottSuccessHandler)
+                        .loginPage("/login/ott")
+                ).logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
                         .permitAll()

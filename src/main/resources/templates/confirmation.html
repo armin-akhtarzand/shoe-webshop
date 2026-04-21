@@ -7,18 +7,23 @@
 </head>
 <body>
 <h1>Confirmation</h1>
-<h2>Thank you for your order!</h2>
-<ul>
-    <li th:each="item : ${order.items}">
-        <span th:text="${item.productName}"></span>
-        <span> | Quantity: </span>
-        <span th:text="${item.quantity}"></span>
-        <span> | Price: </span>
-        <span th:text="${item.price}"></span>
-    </li>
-</ul>
-<h2>Total: </h2>
-<p th:text="${order.totalPrice}"></p>
+<div class="confirmation-container">
+    <h2 class="confirmation-title">Thank you for your order!</h2>
+    <ul class="order-list">
+        <li class="order-item" th:each="item : ${order.items}">
+            <div class="order-info">
+                <p th:text="${item.productName}"></p>
+            </div>
+            <div class="order-meta">
+                <p th:text="'Qty: ' + ${item.quantity}"></p>
+                <p th:text="${item.price}"></p>
+            </div>
+        </li>
+    </ul>
+    <h2>Total: </h2>
+    <p th:text="${order.totalPrice}"></p>
+</div>
+<a th:href="@{/}" class="back-home-btn">Back to home</a>
 
 </body>
 </html>

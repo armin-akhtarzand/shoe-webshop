@@ -30,7 +30,11 @@
                         <span style="color: #666;">|</span>
                     <span sec:authentication="name" style="color: #666; font-size: 0.9em;"></span>
                     <span style="color: #666;">|</span>
-                    <a href="/logout" style="text-decoration: none; color: #0066cc;">Logout</a>
+                        <form th:action="@{/logout}" method="post">
+                            <button style="background-color: #151cff; color: #ffffff"  type="submit">Logout</button>
+                        </form>
+
+                    </a>
 
                 </div>
 

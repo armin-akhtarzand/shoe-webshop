@@ -3,35 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>Cart</title>
+
+    <link rel="stylesheet" th:href="@{/css/cart.css}">
 </head>
+
 <body>
+
 <h1>Cart</h1>
 <ul>
     <li th:each="cartItem : ${cart.cartItems}">
-        <img th:src="${cartItem.product.productImageURL}" style="width:100px; height:auto;"/>
-        <span th:text="${cartItem.product.productName}"></span>
-        <span> | Quantity: </span>
-        <span th:text="${cartItem.quantity}"></span>
-        <span> | Price: </span>
-        <span th:text="${cartItem.product.price}"></span>
-        <span> | Total: </span>
-        <span th:text="${cartItem.totalPrice}"></span>
+        <img th:src="${cartItem.product.productImageURL}" class="cart-image" alt="Product image"/>
+        <div class="cart-info">
+            <span th:text="${cartItem.product.productName}"></span>
+            <span> | Quantity: </span>
+            <span th:text="${cartItem.quantity}"></span>
+            <span> | Price: </span>
+            <span th:text="${cartItem.product.price}"></span>
+            <div class="total">
+                <span> | Total: </span>
+                <span th:text="${cartItem.totalPrice}"></span>
+            </div>
+        </div>
 
 
-        <form th:action="@{/cart/add/{id}(id=${cartItem.product.productId})}" method="post" style="display:inline">
-            <button type="submit">+</button>
-        </form>
-        <form th:action="@{/cart/remove/{id}(id=${cartItem.product.productId})}" method="post" style="display:inline">
-            <button type="submit">-</button>
-        </form>
+        <div class="cart-button">
+            <form th:action="@{/cart/add/{id}(id=${cartItem.product.productId})}" method="post">
+                <button type="submit">+</button>
+            </form>
+            <form th:action="@{/cart/remove/{id}(id=${cartItem.product.productId})}" method="post">
+                <button type="submit">-</button>
+            </form>
+        </div>
     </li>
 </ul>
 <h2>Total: </h2>
 <p th:text="${cart.getTotalPrice()}"></p>
-<form th:action="@{/cart/checkout}" method="post" style="display:inline">
+<form th:action="@{/cart/checkout}" method="post" class="inline-form">
     <button type="submit">Checkout</button>
 </form>
-<form th:action="@{/cart/clear}" method="post" style="display:inline">
+<form th:action="@{/cart/clear}" method="post" class="inline-form">
     <button type="submit">Clear cart</button>
 </form>
 

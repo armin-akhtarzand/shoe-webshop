@@ -17,7 +17,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, EmailOttSuccessHandler ottSuccessHandler) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/register", "/login", "/login/ott", "/ott/generate-ui", "/ott/sent", "/h2-console/**", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/register", "/login", "/login/ott", "/ott/generate-ui", "/ott/sent", "/h2-console/**", "/static/css/**", "/js/**").permitAll()
                         .requestMatchers("/cart/**").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()

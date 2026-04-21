@@ -10,6 +10,8 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -26,11 +28,11 @@ public class OrderItem {
     private int quantity;
 
     @Positive
-    private double price;
+    private BigDecimal price;
 
     public OrderItem() {}
 
-    public OrderItem(String productName, int quantity, double price) {
+    public OrderItem(String productName, int quantity, BigDecimal price) {
         this.productName = productName;
         this.quantity = quantity;
         this.price = price;

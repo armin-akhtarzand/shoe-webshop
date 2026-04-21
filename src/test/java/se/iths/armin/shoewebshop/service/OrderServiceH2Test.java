@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import se.iths.armin.mailservice.MailService;
 import se.iths.armin.shoewebshop.dto.UserRegistrationDto;
 import se.iths.armin.shoewebshop.entity.Cart;
 import se.iths.armin.shoewebshop.entity.CustomerOrder;
@@ -22,17 +24,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class OrderServiceH2Test {
 
+    @MockitoBean
+    private MailService mailService;
     @Autowired
     private OrderService orderService;
-
     @Autowired
     private ProductService productService;
-
     @Autowired
     private AppUserService appUserService;
-
-    private UserRegistrationDto user;
-    private Product product;
     @Autowired
     private AppUserRepository appUserRepository;
     @Autowired
@@ -40,8 +39,16 @@ class OrderServiceH2Test {
     @Autowired
     private ProductRepository productRepository;
 
+    private UserRegistrationDto user;
+    private Product product;
+
     @BeforeEach
     void setUp() {
+
+        appUserRepository.deleteAll();
+        orderRepository.deleteAll();
+        productRepository.deleteAll();
+
         user = new UserRegistrationDto();
         user.setEmail("test@example.com");
         user.setPassword("password123");
@@ -55,16 +62,9 @@ class OrderServiceH2Test {
         product.setPrice(new BigDecimal("60.00"));
         product.setProductImageURL("http://image.com");
 
-        productService.createProduct(product);
+        product = productService.createProduct(product);
+//        productService.createProduct(product);
     }
-
-    @AfterEach
-    void clear() {
-        appUserRepository.deleteAll();
-        orderRepository.deleteAll();
-        productRepository.deleteAll();
-    }
-
 
     @Test
     void checkout_shouldCreateOrderAndClearCart() {
@@ -77,14 +77,13 @@ class OrderServiceH2Test {
 
         assertNotNull(order.getId());
         assertEquals(user.getEmail(), order.getUsername());
+
         assertEquals(1, order.getItems().size());
         assertEquals(2, order.getItems().get(0).getQuantity());
 
         BigDecimal expected = product.getPrice().multiply(BigDecimal.valueOf(2));
 
-        assertEquals(0, expected.compareTo(
-                BigDecimal.valueOf(order.getTotalPrice())
-        ));
+        assertEquals(0, expected.compareTo(order.getTotalPrice()));
 
         assertTrue(cart.isEmpty());
     }
@@ -95,7 +94,7 @@ class OrderServiceH2Test {
         Cart cart = new Cart();
         cart.addProduct(product);
 
-        orderService.checkout(user.getEmail(), cart);
+            orderService.checkout(user.getEmail(), cart);
 
         List<CustomerOrder> orders = orderService.getOrdersForUser(user.getEmail());
 

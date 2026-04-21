@@ -41,7 +41,7 @@ class OrderServiceMockTest {
         OrderItem orderItem = new OrderItem();
         orderItem.setProductName("Test Shoe");
         orderItem.setQuantity(1);
-        orderItem.setPrice(100);
+        orderItem.setPrice(BigDecimal.valueOf(100.00));
 
         List<OrderItem> orderItems = new ArrayList<>();
         orderItems.add(orderItem);
@@ -101,25 +101,10 @@ class OrderServiceMockTest {
                 .findByUsername(username);
     }
 
-    private Cart createCart() {
-        Cart cart = new Cart();
-
-        Product product = new Product();
-        product.setProductName("Test Shoe");
-        product.setPrice(new BigDecimal("60.00"));
-        product.setProductId(1L);
-
-        CartItem item = new CartItem(product, 2);
-
-        cart.getCartItems().add(item);
-
-        return cart;
-    }
-
     private CustomerOrder createOrder(String username) {
         CustomerOrder order = new CustomerOrder();
         order.setUsername(username);
-        order.setTotalPrice(120.0);
+        order.setTotalPrice(BigDecimal.valueOf(120.00));
         return order;
     }
 }

@@ -24,9 +24,14 @@
                     <span style="color: #666;">|</span>
                     <a href="/profile" style="text-decoration: none; color: #0066cc;"> Profile</a>
                     <span style="color: #666;">|</span>
+                        <span sec:authorize="hasRole('ADMIN')">
+                        <a href="/admin/products/new" style="text-decoration: none; color: #0066cc;">Admin</a>
+                    </span>
+                        <span style="color: #666;">|</span>
                     <span sec:authentication="name" style="color: #666; font-size: 0.9em;"></span>
                     <span style="color: #666;">|</span>
                     <a href="/logout" style="text-decoration: none; color: #0066cc;">Logout</a>
+
                 </div>
 
                 <div sec:authorize="!isAuthenticated()" style="display: flex; gap: 15px;">

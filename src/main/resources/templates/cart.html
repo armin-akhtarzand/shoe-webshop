@@ -8,8 +8,10 @@
 </head>
 
 <body>
+<div th:replace="fragments/header :: header"></div>
 
 <h1>Cart</h1>
+
 <ul>
     <li th:each="cartItem : ${cart.cartItems}">
         <img th:src="${cartItem.product.productImageURL}" class="cart-image" alt="Product image"/>

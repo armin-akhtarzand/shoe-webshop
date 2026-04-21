@@ -17,14 +17,15 @@ public class ProductController {
     }
 
     @GetMapping
-    public String showProducts(Model model){
+    public String showProducts(Model model) {
         model.addAttribute("products", productService.getAllProducts());
         return "products";
     }
 
     @GetMapping("/category/{category}")
-    public String showByCategory(Model model, @PathVariable String category){
+    public String showByCategory(Model model, @PathVariable String category) {
         model.addAttribute("products", productService.getProductsByCategory(category));
         return "products";
     }
+
 }

@@ -14,11 +14,15 @@
 
             <nav style="display: flex; gap: 20px; align-items: center;">
                 <a href="/" style="text-decoration: none; color: #0066cc;">Home</a>
+                <span style="color: #666;">|</span>
                 <a href="/products" style="text-decoration: none; color: #0066cc;">Products</a>
+                <span style="color: #666;">|</span>
 
                 <div sec:authorize="isAuthenticated()">
-                    <a href="/cart" style="text-decoration: none; color: #0066cc;">Cart</a>
-                    <a href="/profile" style="text-decoration: none; color: #0066cc;">Profile</a>
+                    <nav style="display: flex; gap: 20px; align-items: center;">
+                    <a href="/cart" style="text-decoration: none; color: #0066cc;">Cart </a>
+                    <span style="color: #666;">|</span>
+                    <a href="/profile" style="text-decoration: none; color: #0066cc;"> Profile</a>
                     <span style="color: #666;">|</span>
                     <span sec:authentication="name" style="color: #666; font-size: 0.9em;"></span>
                     <span style="color: #666;">|</span>

@@ -8,11 +8,11 @@ public class PolicyController {
 
     @GetMapping("/privacy")
     public String privacy() {
-        return "privacy";
+        return "privacy-policy";
     }
 
     @GetMapping("/cookies")
     public String cookies() {
-        return "cookies";
+        return "cookie-policy";
     }
 }

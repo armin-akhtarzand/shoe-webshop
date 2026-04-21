@@ -28,61 +28,63 @@ class OrderServiceH2Test {
     @Autowired
     private AppUserService appUserService;
 
-    private UserRegistrationDto testUserDto;
-    private Product testProduct;
+    private UserRegistrationDto user;
+    private Product product;
 
     @BeforeEach
     void setUp() {
-        testUserDto = createTestUserDto();
-        appUserService.registerUser(testUserDto);
+        user = new UserRegistrationDto();
+        user.setEmail("test@example.com");
+        user.setPassword("password123");
+        user.setConsent(true);
 
-        testProduct = createTestProduct();
-        productService.createProduct(testProduct);
+        appUserService.registerUser(user);
+
+        product = new Product();
+        product.setProductName("Test Shoe");
+        product.setCategory("Sneakers");
+        product.setPrice(new BigDecimal("60.00"));
+        product.setProductImageURL("http://image.com");
+
+        productService.createProduct(product);
     }
 
     @Test
     void checkout_shouldCreateOrderAndClearCart() {
-        Cart cart = new Cart();
-        cart.addProduct(testProduct);
-        cart.addProduct(testProduct);
 
-        CustomerOrder order = orderService.checkout(testUserDto.getEmail(), cart);
+        Cart cart = new Cart();
+        cart.addProduct(product);
+        cart.addProduct(product);
+
+        CustomerOrder order = orderService.checkout(user.getEmail(), cart);
 
         assertNotNull(order.getId());
-        assertEquals(testUserDto.getEmail(), order.getUsername());
+        assertEquals(user.getEmail(), order.getUsername());
         assertEquals(1, order.getItems().size());
         assertEquals(2, order.getItems().get(0).getQuantity());
-        assertEquals(testProduct.getPrice().multiply(BigDecimal.valueOf(2)).doubleValue(), order.getTotalPrice());
+
+        BigDecimal expected = product.getPrice().multiply(BigDecimal.valueOf(2));
+
+        assertEquals(0, expected.compareTo(
+                BigDecimal.valueOf(order.getTotalPrice())
+        ));
+
         assertTrue(cart.isEmpty());
     }
 
     @Test
     void getOrdersForUser_shouldReturnOrders() {
+
         Cart cart = new Cart();
-        cart.addProduct(testProduct);
+        cart.addProduct(product);
 
-        CustomerOrder createdOrder = orderService.checkout(testUserDto.getEmail(), cart);
+        orderService.checkout(user.getEmail(), cart);
 
-        List<CustomerOrder> userOrders = orderService.getOrdersForUser(testUserDto.getEmail());
+        List<CustomerOrder> orders = orderService.getOrdersForUser(user.getEmail());
 
-        assertTrue(userOrders.size() >= 1);
-        assertTrue(userOrders.stream().anyMatch(o -> testUserDto.getEmail().equals(o.getUsername())));
-    }
-
-    private UserRegistrationDto createTestUserDto() {
-        UserRegistrationDto dto = new UserRegistrationDto();
-        dto.setEmail("test@example.com");
-        dto.setPassword("password123");
-        dto.setConsent(true);
-        return dto;
-    }
-
-    private Product createTestProduct() {
-        Product product = new Product();
-        product.setProductName("Test Shoe");
-        product.setCategory("Sneakers");
-        product.setPrice(new BigDecimal("99.99"));
-        product.setProductImageURL("http://example.com/image.jpg");
-        return product;
+        assertTrue(orders.size() >= 1);
+        assertTrue(
+                orders.stream().allMatch(o -> o.getUsername().equals(user.getEmail()))
+        );
     }
 }

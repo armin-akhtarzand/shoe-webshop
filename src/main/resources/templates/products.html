@@ -3,7 +3,8 @@
 <head>
     <title>Products - Shoe Webshop</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        h1 { color: #333; }
         .categories { margin-bottom: 20px; }
         .categories a { margin-right: 10px; padding: 5px 10px; text-decoration: none; border: 1px solid #ccc; background: #f9f9f9; }
         .categories a.active { background: #e0e0e0; }
@@ -20,36 +21,42 @@
     </style>
 </head>
 <body>
-<h1>Products</h1>
+<div th:replace="fragments/header :: header"></div>
 
-<div class="categories">
-    <strong>Filter by category:</strong>
-    <a href="/products" th:class="${param.category == null} ? 'active' : ''">All Products</a>
-    <a href="/products/category/Sneakers" th:class="${param.category == 'Sneakers'} ? 'active' : ''">Sneakers</a>
-    <a href="/products/category/Boots" th:class="${param.category == 'Boots'} ? 'active' : ''">Boots</a>
-    <a href="/products/category/Sandals" th:class="${param.category == 'Sandals'} ? 'active' : ''">Sandals</a>
-    <a href="/products/category/Formal" th:class="${param.category == 'Formal'} ? 'active' : ''">Formal</a>
-</div>
+<div style="max-width: 1200px; margin: 0 auto;">
+    <h1>Products</h1>
 
-<div class="products" th:if="${not #lists.isEmpty(products)}">
-    <div th:each="product : ${products}" class="product">
-        <h3 th:text="${product.productName}">Product Name</h3>
-        <div class="category" th:text="'Category: ' + ${product.category}">Category</div>
-        <div class="price" th:text="'Kr ' + ${#numbers.formatDecimal(product.price, 1, 2)}">Kr 0.00</div>
-        <form th:action="@{/cart/add/{id}(id=${product.productId})}" method="post" sec:authorize="isAuthenticated()">
-            <button type="submit">Add to Cart</button>
-        </form>
-        <div sec:authorize="!isAuthenticated()" class="login-message">
-            Please <a href="/login">login</a> to add items to cart
+    <div class="categories">
+        <strong>Filter by category:</strong>
+        <a href="/products" th:class="${param.category == null} ? 'active' : ''">All Products</a>
+        <a href="/products/category/Sneakers" th:class="${param.category == 'Sneakers'} ? 'active' : ''">Sneakers</a>
+        <a href="/products/category/Boots" th:class="${param.category == 'Boots'} ? 'active' : ''">Boots</a>
+        <a href="/products/category/Sandals" th:class="${param.category == 'Sandals'} ? 'active' : ''">Sandals</a>
+        <a href="/products/category/Formal" th:class="${param.category == 'Formal'} ? 'active' : ''">Formal</a>
+    </div>
+
+    <div class="products" th:if="${not #lists.isEmpty(products)}">
+        <div th:each="product : ${products}" class="product">
+            <h3 th:text="${product.productName}">Product Name</h3>
+            <div class="category" th:text="'Category: ' + ${product.category}">Category</div>
+            <div class="price" th:text="'Kr ' + ${#numbers.formatDecimal(product.price, 1, 2)}">Kr 0.00</div>
+            <form th:action="@{/cart/add/{id}(id=${product.productId})}" method="post" sec:authorize="isAuthenticated()">
+                <button type="submit">Add to Cart</button>
+            </form>
+            <div sec:authorize="!isAuthenticated()" class="login-message">
+                Please <a href="/login">login</a> to add items to cart
+            </div>
         </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(products)}" class="empty">
+        <h3>No products found</h3>
+        <p th:if="${param.category != null}">No products in category: <strong th:text="${param.category}">Category</strong></p>
+        <p th:if="${param.category == null}">No products available.</p>
+        <a href="/products">View all products</a>
     </div>
 </div>
 
-<div th:if="${#lists.isEmpty(products)}" class="empty">
-    <h3>No products found</h3>
-    <p th:if="${param.category != null}">No products in category: <strong th:text="${param.category}">Category</strong></p>
-    <p th:if="${param.category == null}">No products available.</p>
-    <a href="/products">View all products</a>
-</div>
+<div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

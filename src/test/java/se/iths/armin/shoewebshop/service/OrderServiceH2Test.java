@@ -1,5 +1,6 @@
 package se.iths.armin.shoewebshop.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class OrderServiceH2Test {
+class OrderServiceH2Test {
 
     @Autowired
     private OrderService orderService;
@@ -27,51 +28,51 @@ public class OrderServiceH2Test {
     @Autowired
     private AppUserService appUserService;
 
+    private UserRegistrationDto testUserDto;
+    private Product testProduct;
+
+    @BeforeEach
+    void setUp() {
+        testUserDto = createTestUserDto();
+        appUserService.registerUser(testUserDto);
+
+        testProduct = createTestProduct();
+        productService.createProduct(testProduct);
+    }
+
     @Test
-    void checkout_shouldCreateOrderAndClearCart(){
-        UserRegistrationDto userDto = new UserRegistrationDto();
-        appUserService.registerUser(userDto);
-
-        Product product = createTestProduct();
-        productService.createProduct(product);
-
+    void checkout_shouldCreateOrderAndClearCart() {
         Cart cart = new Cart();
-        cart.addProduct(product);
-        cart.addProduct(product);
+        cart.addProduct(testProduct);
+        cart.addProduct(testProduct);
 
-        CustomerOrder order = orderService.checkout(userDto.getEmail(), cart);
+        CustomerOrder order = orderService.checkout(testUserDto.getEmail(), cart);
 
         assertNotNull(order.getId());
-        assertEquals(userDto.getEmail(), order.getUsername());
+        assertEquals(testUserDto.getEmail(), order.getUsername());
         assertEquals(1, order.getItems().size());
         assertEquals(2, order.getItems().get(0).getQuantity());
-        assertEquals(product.getPrice().multiply(BigDecimal.valueOf(2)).doubleValue(), order.getTotalPrice());
+        assertEquals(testProduct.getPrice().multiply(BigDecimal.valueOf(2)).doubleValue(), order.getTotalPrice());
         assertTrue(cart.isEmpty());
     }
 
     @Test
     void getOrdersForUser_shouldReturnOrders() {
-        UserRegistrationDto userDto = createTestUserDto();
-        appUserService.registerUser(userDto);
-
-        Product product = createTestProduct();
-        productService.createProduct(product);
-
         Cart cart = new Cart();
-        cart.addProduct(product);
+        cart.addProduct(testProduct);
 
-        CustomerOrder order = orderService.checkout(userDto.getEmail(), cart);
+        CustomerOrder createdOrder = orderService.checkout(testUserDto.getEmail(), cart);
 
-        List<CustomerOrder> userOrders = orderService.getOrdersForUser(userDto.getEmail());
+        List<CustomerOrder> userOrders = orderService.getOrdersForUser(testUserDto.getEmail());
 
         assertTrue(userOrders.size() >= 1);
-        assertTrue(userOrders.stream().anyMatch(o -> userDto.getEmail().equals(o.getUsername())));
+        assertTrue(userOrders.stream().anyMatch(o -> testUserDto.getEmail().equals(o.getUsername())));
     }
 
     private UserRegistrationDto createTestUserDto() {
         UserRegistrationDto dto = new UserRegistrationDto();
         dto.setEmail("test@example.com");
-        dto.setPassword("password");
+        dto.setPassword("password123");
         dto.setConsent(true);
         return dto;
     }

@@ -51,7 +51,7 @@ public class OrderServiceH2Test {
 
     @Test
     void getOrdersForUser_shouldReturnOrders() {
-        UserRegistrationDto userDto = new UserRegistrationDto();
+        UserRegistrationDto userDto = createTestUserDto();
         appUserService.registerUser(userDto);
 
         Product product = createTestProduct();
@@ -60,13 +60,15 @@ public class OrderServiceH2Test {
         Cart cart = new Cart();
         cart.addProduct(product);
 
+        CustomerOrder order = orderService.checkout(userDto.getEmail(), cart);
+
         List<CustomerOrder> userOrders = orderService.getOrdersForUser(userDto.getEmail());
 
         assertTrue(userOrders.size() >= 1);
         assertTrue(userOrders.stream().anyMatch(o -> userDto.getEmail().equals(o.getUsername())));
     }
 
-    private UserRegistrationDto createTestUSerDto() {
+    private UserRegistrationDto createTestUserDto() {
         UserRegistrationDto dto = new UserRegistrationDto();
         dto.setEmail("test@example.com");
         dto.setPassword("password");

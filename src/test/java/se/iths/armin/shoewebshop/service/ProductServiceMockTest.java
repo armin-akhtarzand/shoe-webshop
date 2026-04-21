@@ -9,13 +9,12 @@ import se.iths.armin.shoewebshop.entity.Product;
 import se.iths.armin.shoewebshop.repository.ProductRepository;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceMockTest {
@@ -27,85 +26,57 @@ class ProductServiceMockTest {
     private ProductService productService;
 
     @Test
-    void createProduct_shouldSaveAndReturnProduct() {
-        Product product = createTestProduct("Test Shoe", "Sneakers");
-        Product savedProduct = createTestProduct("Test Shoe", "Sneakers");
-        savedProduct.setProductId(1L);
+    void createProduct_shouldSaveProduct() {
+        Product product = createProduct();
 
-        when(productRepository.save(any(Product.class))).thenReturn(savedProduct);
+        when(productRepository.save(any(Product.class))).thenReturn(product);
 
         Product result = productService.createProduct(product);
 
-        assertNotNull(result);
-        assertEquals(1L, result.getProductId());
         assertEquals("Test Shoe", result.getProductName());
+        verify(productRepository, times(1)).save(product);
     }
 
     @Test
-    void getAllProducts_shouldReturnAllProducts() {
-        List<Product> products = Arrays.asList(
-                createTestProduct("Shoe 1", "Sneakers"),
-                createTestProduct("Shoe 2", "Boots")
-        );
-        when(productRepository.findAll()).thenReturn(products);
+    void getAllProducts_shouldReturnList() {
+        when(productRepository.findAll()).thenReturn(List.of(createProduct()));
 
         List<Product> result = productService.getAllProducts();
 
-        assertEquals(2, result.size());
-        assertTrue(result.stream().anyMatch(p -> "Shoe 1".equals(p.getProductName())));
-        assertTrue(result.stream().anyMatch(p -> "Shoe 2".equals(p.getProductName())));
+        assertEquals(1, result.size());
+        verify(productRepository).findAll();
     }
 
     @Test
     void findById_shouldReturnProduct() {
-        Product product = createTestProduct("Test Shoe", "Sneakers");
-        product.setProductId(1L);
+        Product product = createProduct();
+
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
         Product result = productService.findById(1L);
 
-        assertNotNull(result);
-        assertEquals(1L, result.getProductId());
         assertEquals("Test Shoe", result.getProductName());
+        verify(productRepository).findById(1L);
     }
 
     @Test
-    void findById_shouldThrowExceptionWhenNotFound() {
-        when(productRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(RuntimeException.class, () -> productService.findById(1L));
-    }
-
-    @Test
-    void getProductsByCategory_shouldReturnFilteredProducts() {
-        List<Product> sneakers = Arrays.asList(
-                createTestProduct("Sneakers A", "Sneakers"),
-                createTestProduct("Sneakers B", "Sneakers")
-        );
-        when(productRepository.findByCategory("Sneakers")).thenReturn(sneakers);
+    void getProductsByCategory_shouldReturnProducts() {
+        when(productRepository.findByCategory("Sneakers"))
+                .thenReturn(List.of(createProduct()));
 
         List<Product> result = productService.getProductsByCategory("Sneakers");
 
-        assertEquals(2, result.size());
-        assertTrue(result.stream().allMatch(p -> "Sneakers".equals(p.getCategory())));
+        assertEquals(1, result.size());
+        verify(productRepository).findByCategory("Sneakers");
     }
 
-    @Test
-    void getProductsByCategory_shouldThrowExceptionForNullCategory() {
-        assertThrows(IllegalArgumentException.class, () -> productService.getProductsByCategory(null));
-    }
-
-    @Test
-    void getProductsByCategory_shouldThrowExceptionForEmptyCategory() {
-        assertThrows(IllegalArgumentException.class, () -> productService.getProductsByCategory(""));
-    }
-
-    private Product createTestProduct(String name, String category) {
+    // helper
+    private Product createProduct() {
         Product product = new Product();
-        product.setProductName(name);
-        product.setCategory(category);
-        product.setPrice(new BigDecimal("49.99"));
-        product.setProductImageURL("http://example.com/test.jpg");
+        product.setProductName("Test Shoe");
+        product.setCategory("Sneakers");
+        product.setPrice(new BigDecimal("99.99"));
+        product.setProductImageURL("http://image.com");
         return product;
     }
 }

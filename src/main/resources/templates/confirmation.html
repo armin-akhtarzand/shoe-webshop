@@ -6,6 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/cart.css}">
 </head>
 <body>
+<div th:replace="fragments/header :: header"></div>
 <h1>Confirmation</h1>
 <div class="confirmation-container">
     <h2 class="confirmation-title">Thank you for your order!</h2>
@@ -15,7 +16,7 @@
                 <p th:text="${item.productName}"></p>
             </div>
             <div class="order-meta">
-                <p th:text="'Qty: ' + ${item.quantity}"></p>
+                <p th:text="'Quantity: ' + ${item.quantity}"></p>
                 <p th:text="${item.price}"></p>
             </div>
         </li>
@@ -23,7 +24,6 @@
     <h2>Total: </h2>
     <p th:text="${order.totalPrice}"></p>
 </div>
-<a th:href="@{/}" class="back-home-btn">Back to home</a>
 
 </body>
 </html>

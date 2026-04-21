@@ -14,7 +14,8 @@
         .container { max-width:1200px; margin:auto; }
 
         .categories { margin-bottom:25px; }
-        .categories a {
+
+        .category-link {
             margin-right:10px;
             padding:6px 12px;
             text-decoration:none;
@@ -22,7 +23,11 @@
             background:#fff;
             border-radius:6px;
         }
-        .categories a.active { background:#e0e0e0; font-weight:bold; }
+
+        .category-link.active {
+            background:#e0e0e0;
+            font-weight:bold;
+        }
 
         .products {
             display:grid;
@@ -37,24 +42,40 @@
             border-radius:10px;
             transition:transform .15s, box-shadow .15s;
         }
+
         .product:hover {
             transform: translateY(-4px);
             box-shadow:0 6px 18px rgba(0,0,0,.1);
         }
 
         .price { font-weight:bold; color:#008000; margin:10px 0; }
+
         button {
-            background:#008000; color:white; border:none;
-            padding:10px; width:100%; border-radius:6px; cursor:pointer;
+            background:#008000;
+            color:white;
+            border:none;
+            padding:10px;
+            width:100%;
+            border-radius:6px;
+            cursor:pointer;
         }
+
         button:hover { background:#006600; }
 
         .empty {
-            text-align:center; padding:40px;
-            border:1px solid #ddd; background:#fff; border-radius:10px;
+            text-align:center;
+            padding:40px;
+            border:1px solid #ddd;
+            background:#fff;
+            border-radius:10px;
         }
 
-        .login-message { color:#cc0000; font-size:0.9em; text-align:center; margin-top:10px; }
+        .login-message {
+            color:#cc0000;
+            font-size:0.9em;
+            text-align:center;
+            margin-top:10px;
+        }
     </style>
 </head>
 
@@ -68,36 +89,43 @@
     <nav class="categories">
         <strong>Filter by category:</strong>
 
-        <a th:href="@{/products}"
-           th:classappend="${param.category == null} ? 'active'">
+        <a class="category-link"
+           th:href="@{/products}"
+           th:classappend="${param.category == null} ? ' active'">
             All Products
         </a>
 
-        <a th:href="@{/products/category/Sneakers(category='Sneakers')}"
-           th:classappend="${param.category == 'Sneakers'} ? 'active'">Sneakers</a>
+        <a class="category-link"
+           th:href="@{/products/category/Sneakers(category='Sneakers')}"
+           th:classappend="${param.category == 'Sneakers'} ? ' active'">
+            Sneakers
+        </a>
 
-        <a th:href="@{/products/category/Boots(category='Boots')}"
-           th:classappend="${param.category == 'Boots'} ? 'active'">Boots</a>
+        <a class="category-link"
+           th:href="@{/products/category/Boots(category='Boots')}"
+           th:classappend="${param.category == 'Boots'} ? ' active'">
+            Boots
+        </a>
 
-        <a th:href="@{/products/category/Sandals(category='Sandals')}"
-           th:classappend="${param.category == 'Sandals'} ? 'active'">Sandals</a>
+        <a class="category-link"
+           th:href="@{/products/category/Sandals(category='Sandals')}"
+           th:classappend="${param.category == 'Sandals'} ? ' active'">
+            Sandals
+        </a>
 
-        <a th:href="@{/products/category/Formal(category='Formal')}"
-           th:classappend="${param.category == 'Formal'} ? 'active'">Formal</a>
+        <a class="category-link"
+           th:href="@{/products/category/Formal(category='Formal')}"
+           th:classappend="${param.category == 'Formal'} ? ' active'">
+            Formal
+        </a>
     </nav>
 
     <section class="products" th:if="${not #lists.isEmpty(products)}">
 
         <article th:each="product : ${products}" class="product">
-
             <h2 th:text="${product.productName}">Product Name</h2>
-
             <p>Category: <span th:text="${product.category}"></span></p>
-
-            <p class="price"
-               th:text="|Kr ${#numbers.formatDecimal(product.price,1,2)}|">
-                Kr 0.00
-            </p>
+            <p class="price" th:text="|Kr ${#numbers.formatDecimal(product.price,1,2)}|">Kr 0.00</p>
 
             <div sec:authorize="isAuthenticated()">
                 <form th:action="@{/cart/add/{id}(id=${product.productId})}" method="post">
@@ -109,18 +137,13 @@
             <p sec:authorize="!isAuthenticated()" class="login-message">
                 Please <a th:href="@{/login}">login</a> to add items to cart
             </p>
-
         </article>
+
     </section>
 
     <section th:if="${#lists.isEmpty(products)}" class="empty">
         <h2>No products found</h2>
-
-        <p th:text="${param.category != null} ?
-            'No products in category: ' + param.category :
-            'No products available.'">
-        </p>
-
+        <p th:text="${param.category != null} ? 'No products in category: ' + param.category : 'No products available.'"></p>
         <a th:href="@{/products}">View all products</a>
     </section>
 

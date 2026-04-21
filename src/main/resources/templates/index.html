@@ -2,55 +2,70 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Shoe Webshop - Home</title>
+
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
-        .content { text-align: center; margin: 40px 0; background: white; padding: 30px; border-radius: 4px; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .content h2 { color: #333; }
-        .content p { color: #666; font-size: 1.1em; }
-        .content a { display: inline-block; background: #0066cc; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; margin-top: 20px; }
-        .content a:hover { background: #004999; }
-        .cookie-banner {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            background: gray; color: white; padding: 10px; text-align: center;
-            display: none; z-index: 999;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f7f7f7;
         }
-        .cookie-banner button { margin: 0 10px; padding: 5px 10px; }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .hero {
+            background: white;
+            padding: 40px;
+            border-radius: 6px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        .hero h1 {
+            color: #333;
+        }
+
+        .hero p {
+            color: #666;
+            font-size: 18px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 14px 28px;
+            background: #0066cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .cta-btn:hover {
+            background: #004999;
+        }
     </style>
 </head>
 <body>
+
 <div th:replace="fragments/header :: header"></div>
 
-<div style="max-width: 1200px; margin: 0 auto;">
-    <div class="content">
-        <h2>Find Your Perfect Shoes</h2>
-        <p>Discover our collection of shoes from top brands.</p>
-        <p>Browse by category or view all products.</p>
-        <a href="/products">Start Shopping</a>
+<div class="container">
+    <div class="hero">
+        <h1>Welcome to the Shoe Webshop</h1>
+
+        <p>Find your perfect pair of shoes from our collection.</p>
+        <p>Browse sneakers, boots and everyday footwear.</p>
+
+        <a href="/products" class="cta-btn">Browse Products</a>
     </div>
 </div>
 
-<div id="cookieBanner" class="cookie-banner">
-    This website uses cookies.
-    <button onclick="acceptCookies()">Accept</button>
-    <button onclick="declineCookies()">Decline</button>
-</div>
-
 <div th:replace="fragments/footer :: footer"></div>
+<div th:replace="fragments/cookie-banner :: *"></div>
 
-<script>
-    function acceptCookies() {
-        document.cookie = "cookieConsent=accepted; path=/; max-age=31536000";
-        document.getElementById('cookieBanner').style.display = 'none';
-    }
-    function declineCookies() {
-        document.cookie = "cookieConsent=declined; path=/; max-age=31536000";
-        document.getElementById('cookieBanner').style.display = 'none';
-    }
-    window.onload = function() {
-        if (!document.cookie.includes('cookieConsent=')) {
-            document.getElementById('cookieBanner').style.display = 'block';
-        }
-    }
-</script>
 </body>
 </html>

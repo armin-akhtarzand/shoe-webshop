@@ -1,0 +1,38 @@
+<div id="cookieBanner" class="cookie-banner">
+    This website uses cookies.
+
+    <form action="/cookies/accept" method="post" style="display:inline;">
+        <button type="submit">Accept</button>
+    </form>
+
+    <form action="/cookies/decline" method="post" style="display:inline;">
+        <button type="submit">Decline</button>
+    </form>
+</div>
+
+<script>
+    window.onload = function () {
+        if (!document.cookie.includes("cookieConsent=")) {
+            document.getElementById("cookieBanner").style.display = "block";
+        }
+    };
+</script>
+
+<style>
+    .cookie-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: gray;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        display: none;
+        z-index: 999;
+    }
+    .cookie-banner button {
+        margin: 0 10px;
+        padding: 5px 10px;
+    }
+</style>

@@ -70,7 +70,6 @@ class ProductServiceMockTest {
         verify(productRepository).findByCategory("Sneakers");
     }
 
-    // helper
     private Product createProduct() {
         Product product = new Product();
         product.setProductName("Test Shoe");

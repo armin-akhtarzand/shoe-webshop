@@ -5,7 +5,6 @@ import se.iths.armin.shoewebshop.entity.Product;
 import se.iths.armin.shoewebshop.repository.ProductRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService {

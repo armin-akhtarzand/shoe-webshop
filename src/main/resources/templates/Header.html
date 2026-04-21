@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+</head>
+<body>
+<div th:fragment="header">
+    <header style="background: #f0f0f0; padding: 15px; border-bottom: 1px solid #ddd; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto;">
+            <div>
+                <h2 style="margin: 0;">
+                    <a href="/" style="text-decoration: none; color: #333;">Shoe Webshop</a>
+                </h2>
+            </div>
+
+            <nav style="display: flex; gap: 20px; align-items: center;">
+                <a href="/" style="text-decoration: none; color: #0066cc;">Home</a>
+                <a href="/products" style="text-decoration: none; color: #0066cc;">Products</a>
+
+                <div sec:authorize="isAuthenticated()">
+                    <a href="/cart" style="text-decoration: none; color: #0066cc;">Cart</a>
+                    <a href="/profile" style="text-decoration: none; color: #0066cc;">Profile</a>
+                    <span style="color: #666;">|</span>
+                    <span sec:authentication="name" style="color: #666; font-size: 0.9em;"></span>
+                    <span style="color: #666;">|</span>
+                    <a href="/logout" style="text-decoration: none; color: #0066cc;">Logout</a>
+                </div>
+
+                <div sec:authorize="!isAuthenticated()" style="display: flex; gap: 15px;">
+                    <a href="/login" style="text-decoration: none; color: #0066cc;">Login</a>
+                    <a href="/register" style="text-decoration: none; color: #0066cc;">Register</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+</div>
+</body>
+</html>

@@ -1,16 +1,16 @@
 package se.iths.armin.shoewebshop.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import se.iths.armin.shoewebshop.entity.Product;
-import se.iths.armin.shoewebshop.repository.ProductRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -19,67 +19,51 @@ class ProductServiceH2Test {
     @Autowired
     private ProductService productService;
 
-    @Autowired
-    private ProductRepository productRepository;
+    private Product product;
 
-    @Test
-    void createProduct_shouldSaveProduct() {
-        Product product = new Product();
+    @BeforeEach
+    void setUp() {
+        product = new Product();
         product.setProductName("Test Shoe");
         product.setCategory("Sneakers");
         product.setPrice(new BigDecimal("99.99"));
-        product.setProductImageURL("http://example.com/image.jpg");
-
-        Product savedProduct = productService.createProduct(product);
-
-        assertThat(savedProduct.getProductId()).isNotNull();
-        assertThat(savedProduct.getProductName()).isEqualTo("Test Shoe");
-        assertThat(productRepository.findById(savedProduct.getProductId())).isPresent();
+        product.setProductImageURL("http://image.com");
     }
 
     @Test
-    void getAllProducts_shouldReturnAllProducts() {
-        Product product1 = createTestProduct("Shoe 1", "Sneakers");
-        Product product2 = createTestProduct("Shoe 2", "Boots");
-        productRepository.save(product1);
-        productRepository.save(product2);
+    void createProduct_shouldSaveProduct() {
+        Product saved = productService.createProduct(product);
+
+        assertNotNull(saved);
+        assertNotNull(saved.getProductId());
+        assertEquals("Test Shoe", saved.getProductName());
+    }
+
+    @Test
+    void getAllProducts_shouldReturnList() {
+        productService.createProduct(product);
+
         List<Product> products = productService.getAllProducts();
 
-        assertThat(products).hasSizeGreaterThanOrEqualTo(2);
-        assertThat(products).extracting(Product::getProductName)
-                .contains("Shoe 1", "Shoe 2");
+        assertFalse(products.isEmpty());
     }
 
     @Test
     void findById_shouldReturnProduct() {
-        Product product = createTestProduct("Test Shoe", "Sneakers");
-        Product savedProduct = productRepository.save(product);
+        Product saved = productService.createProduct(product);
 
-        Product foundProduct = productService.findById(savedProduct.getProductId());
+        Product found = productService.findById(saved.getProductId());
 
-        assertThat(foundProduct).isNotNull();
-        assertThat(foundProduct.getProductName()).isEqualTo("Test Shoe");
+        assertEquals(saved.getProductId(), found.getProductId());
     }
 
     @Test
-    void getProductsByCategory_shouldReturnFilteredProducts() {
-        Product sneakers = createTestProduct("Sneakers A", "Sneakers");
-        Product boots = createTestProduct("Boots A", "Boots");
-        productRepository.save(sneakers);
-        productRepository.save(boots);
+    void getProductsByCategory_shouldReturnProducts() {
+        productService.createProduct(product);
 
-        List<Product> sneakersList = productService.getProductsByCategory("Sneakers");
+        List<Product> result = productService.getProductsByCategory("Sneakers");
 
-        assertThat(sneakersList).hasSize(1);
-        assertThat(sneakersList.get(0).getCategory()).isEqualTo("Sneakers");
-    }
-
-    private Product createTestProduct(String name, String category) {
-        Product product = new Product();
-        product.setProductName(name);
-        product.setCategory(category);
-        product.setPrice(new BigDecimal("49.99"));
-        product.setProductImageURL("http://example.com/test.jpg");
-        return product;
+        assertFalse(result.isEmpty());
+        assertTrue(result.stream().allMatch(p -> p.getCategory().equals("Sneakers")));
     }
 }

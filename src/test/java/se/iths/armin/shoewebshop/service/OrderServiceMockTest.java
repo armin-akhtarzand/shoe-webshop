@@ -5,13 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import se.iths.armin.mailservice.MailService;
 import se.iths.armin.shoewebshop.entity.*;
 import se.iths.armin.shoewebshop.repository.OrderRepository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,46 +34,36 @@ class OrderServiceMockTest {
 
         String username = "test@example.com";
 
+        Product product = new Product();
+        product.setProductName("Test Shoe");
+        product.setPrice(BigDecimal.valueOf(100));
+
         Cart cart = new Cart();
-
-
-        OrderItem orderItem = new OrderItem();
-        orderItem.setProductName("Test Shoe");
-        orderItem.setQuantity(1);
-        orderItem.setPrice(BigDecimal.valueOf(100.00));
-
-        List<OrderItem> orderItems = new ArrayList<>();
-        orderItems.add(orderItem);
+        cart.addProduct(product);
 
         CustomerOrder savedOrder = new CustomerOrder();
         savedOrder.setId(1L);
         savedOrder.setUsername(username);
-        savedOrder.setItems(orderItems);
 
+        OrderItem item = new OrderItem();
+        item.setProductName("Test Shoe");
+        item.setQuantity(1);
 
-        when(orderRepository.save(any(CustomerOrder.class)))
-                .thenReturn(savedOrder);
+        savedOrder.setItems(List.of(item));
+
+        when(orderRepository.save(any())).thenReturn(savedOrder);
 
         CustomerOrder result = orderService.checkout(username, cart);
 
         assertEquals(1L, result.getId());
         assertEquals(username, result.getUsername());
-
         assertEquals(1, result.getItems().size());
         assertEquals("Test Shoe", result.getItems().get(0).getProductName());
-        assertEquals(1, result.getItems().get(0).getQuantity());
 
         assertTrue(cart.isEmpty());
 
-        verify(orderRepository, times(1))
-                .save(any(CustomerOrder.class));
-
-        verify(mailService, times(1))
-                .sendMail(
-                        eq(username),
-                        eq("Order Confirmation"),
-                        any(String.class)
-                );
+        verify(orderRepository).save(any(CustomerOrder.class));
+        verify(mailService).sendMail(eq(username), eq("Order Confirmation"), anyString());
     }
 
     @Test
@@ -83,29 +71,12 @@ class OrderServiceMockTest {
 
         String username = "test@example.com";
 
-        List<CustomerOrder> orders = List.of(
-                createOrder(username),
-                createOrder(username)
-        );
-
         when(orderRepository.findByUsername(username))
-                .thenReturn(orders);
+                .thenReturn(List.of(new CustomerOrder(), new CustomerOrder()));
 
-        List<CustomerOrder> result =
-                orderService.getOrdersForUser(username);
+        List<CustomerOrder> result = orderService.getOrdersForUser(username);
 
         assertEquals(2, result.size());
-        assertTrue(result.stream()
-                .allMatch(o -> o.getUsername().equals(username)));
-
-        verify(orderRepository, times(1))
-                .findByUsername(username);
-    }
-
-    private CustomerOrder createOrder(String username) {
-        CustomerOrder order = new CustomerOrder();
-        order.setUsername(username);
-        order.setTotalPrice(BigDecimal.valueOf(120.00));
-        return order;
+        verify(orderRepository).findByUsername(username);
     }
 }

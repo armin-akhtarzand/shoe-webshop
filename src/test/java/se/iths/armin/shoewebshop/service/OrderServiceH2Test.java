@@ -1,5 +1,6 @@
 package se.iths.armin.shoewebshop.service;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,9 @@ import se.iths.armin.shoewebshop.dto.UserRegistrationDto;
 import se.iths.armin.shoewebshop.entity.Cart;
 import se.iths.armin.shoewebshop.entity.CustomerOrder;
 import se.iths.armin.shoewebshop.entity.Product;
+import se.iths.armin.shoewebshop.repository.AppUserRepository;
+import se.iths.armin.shoewebshop.repository.OrderRepository;
+import se.iths.armin.shoewebshop.repository.ProductRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,6 +33,12 @@ class OrderServiceH2Test {
 
     private UserRegistrationDto user;
     private Product product;
+    @Autowired
+    private AppUserRepository appUserRepository;
+    @Autowired
+    private OrderRepository orderRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
@@ -47,6 +57,14 @@ class OrderServiceH2Test {
 
         productService.createProduct(product);
     }
+
+    @AfterEach
+    void clear() {
+        appUserRepository.deleteAll();
+        orderRepository.deleteAll();
+        productRepository.deleteAll();
+    }
+
 
     @Test
     void checkout_shouldCreateOrderAndClearCart() {

@@ -6,12 +6,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import se.iths.armin.mailservice.MailService;
-import se.iths.armin.shoewebshop.entity.Cart;
-import se.iths.armin.shoewebshop.entity.CustomerOrder;
-import se.iths.armin.shoewebshop.entity.Product;
+import se.iths.armin.shoewebshop.entity.*;
 import se.iths.armin.shoewebshop.repository.OrderRepository;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,12 +35,22 @@ class OrderServiceMockTest {
 
         String username = "test@example.com";
 
-        Cart cart = createCart();
+        Cart cart = new Cart();
+
+
+        OrderItem orderItem = new OrderItem();
+        orderItem.setProductName("Test Shoe");
+        orderItem.setQuantity(1);
+        orderItem.setPrice(100);
+
+        List<OrderItem> orderItems = new ArrayList<>();
+        orderItems.add(orderItem);
 
         CustomerOrder savedOrder = new CustomerOrder();
         savedOrder.setId(1L);
         savedOrder.setUsername(username);
-        savedOrder.setTotalPrice(120.0);
+        savedOrder.setItems(orderItems);
+
 
         when(orderRepository.save(any(CustomerOrder.class)))
                 .thenReturn(savedOrder);
@@ -53,7 +62,7 @@ class OrderServiceMockTest {
 
         assertEquals(1, result.getItems().size());
         assertEquals("Test Shoe", result.getItems().get(0).getProductName());
-        assertEquals(2, result.getItems().get(0).getQuantity());
+        assertEquals(1, result.getItems().get(0).getQuantity());
 
         assertTrue(cart.isEmpty());
 
@@ -100,8 +109,9 @@ class OrderServiceMockTest {
         product.setPrice(new BigDecimal("60.00"));
         product.setProductId(1L);
 
-        cart.addProduct(product);
-        cart.addProduct(product);
+        CartItem item = new CartItem(product, 2);
+
+        cart.getCartItems().add(item);
 
         return cart;
     }

@@ -8,6 +8,7 @@ import se.iths.armin.shoewebshop.entity.CustomerOrder;
 import se.iths.armin.shoewebshop.entity.OrderItem;
 import se.iths.armin.shoewebshop.repository.OrderRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +30,14 @@ public class OrderService {
             OrderItem orderItem = new OrderItem();
             orderItem.setProductName(cartItem.getProduct().getProductName());
             orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setPrice(cartItem.getPrice().doubleValue());
+            orderItem.setPrice(cartItem.getProduct().getPrice());
 
             orderItems.add(orderItem);
         }
         CustomerOrder customerOrder = new CustomerOrder();
         customerOrder.setUsername(username);
         customerOrder.setOrderDate(LocalDateTime.now());
-        customerOrder.setTotalPrice(cart.getTotalPrice().doubleValue());
+        customerOrder.setTotalPrice(BigDecimal.valueOf(cart.getTotalPrice().doubleValue()));
         customerOrder.setItems(orderItems);
 
         CustomerOrder savedOrder = orderRepository.save(customerOrder);

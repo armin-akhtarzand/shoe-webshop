@@ -69,9 +69,4 @@ public class AuthController {
         userService.registerUser(userDto);
         return "redirect:/login?registered";
     }
-
-    @GetMapping("/")
-    public String home() {
-        return "index";
-    }
 }

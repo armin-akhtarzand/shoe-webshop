@@ -2,9 +2,11 @@ package se.iths.armin.shoewebshop.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,8 @@ public class CustomerOrder {
 
     @NotBlank
     private String username;
-    private double totalPrice;
+    @Positive
+    private BigDecimal totalPrice;
     private LocalDateTime orderDate;
 
     @OneToMany(cascade = CascadeType.ALL)

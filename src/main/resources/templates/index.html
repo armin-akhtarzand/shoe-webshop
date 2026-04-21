@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Shoe Webshop - Home</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f7f7f7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .hero {
+            background: white;
+            padding: 40px;
+            border-radius: 6px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        .hero h1 {
+            color: #333;
+        }
+
+        .hero p {
+            color: #666;
+            font-size: 18px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 14px 28px;
+            background: #0066cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .cta-btn:hover {
+            background: #004999;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<div class="container">
+    <div class="hero">
+        <h1>Welcome to the Shoe Webshop</h1>
+
+        <p>Find your perfect pair of shoes from our collection.</p>
+        <p>Browse sneakers, boots and formal footwear.</p>
+
+        <a href="/products" class="cta-btn">Browse Products</a>
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="fragments/cookie-banner :: cookieBanner"></div>
+
+</body>
+</html>

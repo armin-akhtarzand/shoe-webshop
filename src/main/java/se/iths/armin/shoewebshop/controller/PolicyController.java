@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class PolicyController {
 
-    @GetMapping("/privacy")
+    @GetMapping("/privacy-policy")
     public String privacy() {
         return "privacy-policy";
     }
 
-    @GetMapping("/cookies")
+    @GetMapping("/cookie-policy")
     public String cookies() {
         return "cookie-policy";
     }

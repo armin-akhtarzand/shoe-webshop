@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <link rel="stylesheet" th:href="@{/css/cookie-banner.css}">
-    <script th:src="@{/js/cookie-banner.js}" defer></script>
+<head><title> Header </title>
 </head>
 <body>
 <div th:fragment="header">
@@ -35,6 +33,7 @@
 <!--                        <form th:action="@{/logout}" method="post">-->
 <!--                            <button style="background-color: #151cff; color: #ffffff"  type="submit">Logout</button>-->
 <!--                        </form>Går inte att använda href här pga. /logout = post, Button blev ganska fult, Logout via Profile känns bättre -->
+                    </nav>
                 </div>
 
                 <div sec:authorize="!isAuthenticated()" style="display: flex; gap: 15px;">

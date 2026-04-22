@@ -101,7 +101,7 @@
 
 <body>
 
-<div th:replace="fragments/header :: header"></div>
+<div th:replace="~{fragments/header :: header}"></div>
 
 <main class="container">
     <h1>Products</h1>
@@ -170,7 +170,8 @@
 
 </main>
 
-<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<div th:replace="~{fragments/cookie-banner :: cookieBanner}"></div>
 
 </body>
 </html>

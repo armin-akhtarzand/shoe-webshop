@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" th:href="@{/css/cookie-banner.css}">
+    <script th:src="@{/js/cookie-banner.js}" defer></script>
     <title>Shoe Webshop - Home</title>
 
     <style>
@@ -51,7 +53,7 @@
 </head>
 <body>
 
-<div th:replace="fragments/header :: header"></div>
+<div th:replace="~{fragments/header :: header}"></div>
 
 <div class="container">
     <div class="hero">
@@ -64,7 +66,8 @@
     </div>
 </div>
 
-<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<div th:replace="~{fragments/cookie-banner :: cookieBanner}"></div>
 
 </body>
 </html>

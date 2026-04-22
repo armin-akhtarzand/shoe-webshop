@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<div th:replace="fragments/header :: header"></div>
+<div th:replace="~{fragments/header :: header}"></div>
 
 <div style="max-width: 800px; margin: auto; padding: 20px; background: white;">
 
@@ -39,7 +39,8 @@
 
 </div>
 
-<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<div th:replace="~{fragments/cookie-banner :: cookieBanner}"></div>
 
 </body>
 </html>

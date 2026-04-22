@@ -1,4 +1,4 @@
-<div id="cookieBanner" class="cookie-banner">
+<div id="cookieBanner" class="cookie-banner" th:fragment="cookieBanner">
     This website uses cookies.
 
     <form action="/cookies/accept" method="post" style="display:inline;">
@@ -31,6 +31,7 @@
         display: none;
         z-index: 999;
     }
+
     .cookie-banner button {
         margin: 0 10px;
         padding: 5px 10px;

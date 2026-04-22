@@ -4,45 +4,85 @@
     <meta charset="UTF-8">
     <title>Your Profile - Shoe Webshop</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
-        .container { max-width: 600px; margin: auto; }
-        .btn { padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-right: 10px; }
-        .btn-delete { background-color: #dc3545; color: white; }
-        .btn-export { background-color: #17a2b8; color: white; }
-        .btn-logout { background-color: #6c757d; color: white; }
-        .success { color: green; margin-bottom: 20px; font-weight: bold; }
-        hr { margin: 20px 0; border: 0; border-top: 1px solid #eee; }
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-export {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-logout {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .success {
+            color: green;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        hr {
+            margin: 20px 0;
+            border: 0;
+            border-top: 1px solid #eee;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Your Profile</h2>
-        <p>Logged in as: <strong th:text="${username}">Username</strong></p>
-        
-        <div th:if="${param.exported}" class="success">
-            Your data has been sent to your email address.
-        </div>
+<div th:replace="fragments/header :: header"></div>
+<div class="container">
+    <h2>Your Profile</h2>
+    <p>Logged in as: <strong th:text="${username}">Username</strong></p>
 
-        <div sec:authorize="hasRole('ADMIN')">
-            <p style="color: blue;">You have the role: <strong>ADMIN</strong></p>
-        </div>
+    <div th:if="${param.exported}" class="success">
+        Your data has been sent to your email address.
+    </div>
 
-        <hr>
-        <h3>Account Management</h3>
-        <div style="margin-bottom: 20px;">
-            <form th:action="@{/profile/export}" method="post" style="display:inline;">
-                <button type="submit" class="btn btn-export">Send my data to email</button>
-            </form>
-            
-            <form th:action="@{/profile/delete}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete your account? This action is permanent.');">
-                <button type="submit" class="btn btn-delete">Delete my account</button>
-            </form>
-        </div>
+    <div sec:authorize="hasRole('ADMIN')">
+        <p style="color: blue;">You have the role: <strong>ADMIN</strong></p>
+    </div>
 
-        <hr>
-        <form th:action="@{/logout}" method="post">
-            <button type="submit" class="btn btn-logout">Logout</button>
+    <hr>
+    <h3>Account Management</h3>
+    <div style="margin-bottom: 20px;">
+        <form th:action="@{/profile/export}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-export">Send my data to email</button>
+        </form>
+
+        <form th:action="@{/profile/delete}" method="post" style="display:inline;"
+              onsubmit="return confirm('Are you sure you want to delete your account? This action is permanent.');">
+            <button type="submit" class="btn btn-delete">Delete my account</button>
         </form>
     </div>
+
+    <hr>
+    <form th:action="@{/logout}" method="post">
+        <button type="submit" class="btn btn-logout">Logout</button>
+    </form>
+</div>
 </body>
 </html>

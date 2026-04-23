@@ -5,10 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import se.iths.armin.shoewebshop.entity.Cart;
 import se.iths.armin.shoewebshop.entity.CustomerOrder;
@@ -37,9 +34,11 @@ public class CartController {
 
 
     @PostMapping("/add/{id}")
-    public String addProductToCart(@PathVariable Long id, HttpSession session) {
+    public String addProductToCart(@PathVariable Long id,
+                                   @RequestParam(required = false) String from,
+                                   HttpSession session) {
         cartService.addProduct(session, id);
-        if ("/cart".equals(session.getServletContext().getContextPath())) {
+        if ("cart".equals(from)) {
             return "redirect:/cart";
         }
         return "redirect:/products";

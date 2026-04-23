@@ -30,6 +30,7 @@
 
         <div class="cart-button">
             <form th:action="@{/cart/add/{id}(id=${cartItem.product.productId})}" method="post">
+                <input type="hidden" name="from" value="cart"/>
                 <button type="submit">+</button>
             </form>
             <form th:action="@{/cart/remove/{id}(id=${cartItem.product.productId})}" method="post">

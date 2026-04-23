@@ -57,7 +57,7 @@ public class OrderService {
                     .append(" kr\n");
         }
 
-        orderConfirmation.append("\nTotalpris: ")
+        orderConfirmation.append("\nTotal price: ")
                 .append(savedOrder.getTotalPrice())
                 .append(" kr");
 
